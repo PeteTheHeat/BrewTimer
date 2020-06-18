@@ -5,12 +5,21 @@
 
 import React from 'react';
 import RNPickerSelect from 'react-native-picker-select';
-import {SafeAreaView, StyleSheet, View, Text, StatusBar,Button} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  StatusBar,
+  Button,
+} from 'react-native';
 import Counter from 'react-native-counters';
+import 'react-native-gesture-handler';
+import {NavigationContainer} from '@react-navigation/native';
 
 const App: () => React$Node = () => {
   return (
-    <>
+    <NavigationContainer>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <View style={styles.rowStyle}>
@@ -44,18 +53,23 @@ const App: () => React$Node = () => {
             }}
           />
         </View>
-        <Button onPress={()=>{console.log('lol')}} title={'Start Brew'}/>
+        <Button
+          onPress={() => {
+            console.log('lol');
+          }}
+          title={'Start Brew'}
+        />
       </SafeAreaView>
-    </>
+    </NavigationContainer>
   );
 };
 
 const styles = StyleSheet.create({
   rowStyle: {
     flexDirection: 'row',
-    justifyContent:'space-around',
-    alignItems:'center',
-    margin:10,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    margin: 10,
   },
 });
 
