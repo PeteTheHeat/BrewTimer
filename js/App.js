@@ -4,73 +4,23 @@
  */
 
 import React from 'react';
-import RNPickerSelect from 'react-native-picker-select';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-  StatusBar,
-  Button,
-} from 'react-native';
-import Counter from 'react-native-counters';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import StartBrewScreen from './StartBrewScreen';
+import BrewHistoryScreen from './BrewHistoryScreen';
+import SettingsScreen from './SettingsScreen';
 
-const App: () => React$Node = () => {
+const Tab = createBottomTabNavigator();
+
+export default function App() {
   return (
     <NavigationContainer>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <View style={styles.rowStyle}>
-          <Text>Bean</Text>
-          <RNPickerSelect
-            onValueChange={(value) => console.log(value)}
-            items={[
-              {label: 'Philz Decaf', value: 'philz'},
-              {label: 'Peets', value: 'peets'},
-            ]}
-            placeholder={{}}
-          />
-        </View>
-        <View style={styles.rowStyle}>
-          <Text>Dosage</Text>
-          <Counter
-            start={8}
-            max={40}
-            onChange={(number, type) => {
-              console.log(number, type);
-            }}
-          />
-        </View>
-        <View style={styles.rowStyle}>
-          <Text>Grind</Text>
-          <Counter
-            start={6}
-            max={100}
-            onChange={(number, type) => {
-              console.log(number, type);
-            }}
-          />
-        </View>
-        <Button
-          onPress={() => {
-            console.log('lol');
-          }}
-          title={'Start Brew'}
-        />
-      </SafeAreaView>
+      <Tab.Navigator>
+        <Tab.Screen name="Start Brew" component={StartBrewScreen} />
+        <Tab.Screen name="Brew History" component={BrewHistoryScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
-};
-
-const styles = StyleSheet.create({
-  rowStyle: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    margin: 10,
-  },
-});
-
-export default App;
+}
