@@ -3,7 +3,7 @@
  * @flow strict-local
  */
 
-import * as React from 'react';
+import React, {useState} from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 import {
   SafeAreaView,
@@ -14,8 +14,31 @@ import {
   Button,
 } from 'react-native';
 import Counter from 'react-native-counters';
+import {Stopwatch} from 'react-native-stopwatch-timer';
 
 export default function StartBrewScreen() {
+  // Vars to hold brew stats. Initial state matches hardcoded start values
+  const [bean, setBean] = useState('philz');
+  const [dose, setDose] = useState(8);
+  const [grind, setGrind] = useState(6);
+  const [brewTime, setBrewTime] = useState(0);
+  const [brewRatio, setBrewRatio] = useState(0);
+  const [stopwatchStart, setStopwatchStart] = useState(false);
+
+  const stopwatchOptions = {
+    container: {
+      backgroundColor: '#000',
+      padding: 5,
+      borderRadius: 5,
+      width: 220,
+    },
+    text: {
+      fontSize: 30,
+      color: '#FFF',
+      marginLeft: 7,
+    },
+  };
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -23,7 +46,7 @@ export default function StartBrewScreen() {
         <View style={styles.rowStyle}>
           <Text>Bean</Text>
           <RNPickerSelect
-            onValueChange={(value) => console.log(value)}
+            onValueChange={(value) => setBean(value)}
             items={[
               {label: 'Philz Decaf', value: 'philz'},
               {label: 'Peets', value: 'peets'},
@@ -32,13 +55,11 @@ export default function StartBrewScreen() {
           />
         </View>
         <View style={styles.rowStyle}>
-          <Text>Dosage</Text>
+          <Text>Dose</Text>
           <Counter
             start={8}
             max={40}
-            onChange={(number, type) => {
-              console.log(number, type);
-            }}
+            onChange={(number, type) => setDose(number)}
           />
         </View>
         <View style={styles.rowStyle}>
@@ -46,16 +67,61 @@ export default function StartBrewScreen() {
           <Counter
             start={6}
             max={100}
-            onChange={(number, type) => {
-              console.log(number, type);
+            onChange={(number, type) => setGrind(number)}
+          />
+        </View>
+        <Button
+          onPress={() => setStopwatchStart(!stopwatchStart)}
+          title={'Start Brew'}
+        />
+        <Stopwatch
+          laps
+          msecs
+          start={stopwatchStart}
+          options={stopwatchOptions}
+          getTime={(time) => {
+            setBrewTime(time);
+          }}
+        />
+        <View style={styles.rowStyle}>
+          <Button
+            onPress={() => {
+              setStopwatchStart(false);
+              setBrewRatio(1);
             }}
+            title={'1:1'}
+          />
+          <Button
+            onPress={() => {
+              setStopwatchStart(false);
+              setBrewRatio(2);
+            }}
+            title={'2:1'}
+          />
+          <Button
+            onPress={() => {
+              setStopwatchStart(false);
+              setBrewRatio(3);
+            }}
+            title={'3:1'}
           />
         </View>
         <Button
           onPress={() => {
-            console.log('lol');
+            console.log(
+              'Saving brew with stats: \nBean - ' +
+                bean +
+                '\nDose - ' +
+                dose +
+                '\nGrind - ' +
+                grind +
+                '\nBrew Time ' +
+                brewTime +
+                '\nBrew Ratio ' +
+                brewRatio,
+            );
           }}
-          title={'Start Brew'}
+          title={'Save to Brew History'}
         />
       </SafeAreaView>
     </>
