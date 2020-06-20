@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import Counter from 'react-native-counters';
 import {Stopwatch} from 'react-native-stopwatch-timer';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function StartBrewScreen() {
   // Vars to hold brew stats. Initial state matches hardcoded start values
@@ -37,6 +38,40 @@ export default function StartBrewScreen() {
       color: '#FFF',
       marginLeft: 7,
     },
+  };
+
+  const saveData = async () => {
+    try {
+      // A very crude storage mechanism:
+      // 1. Store a counter which is "the number of brews in brew history"
+      // 2. Increment that counter
+      // 3. Store a new brew at that increment
+      const brewHistoryCount = await AsyncStorage.getItem('brewHistoryCount');
+      let brewHistoryCountInt;
+      if (!brewHistoryCount) {
+        // First run
+        await AsyncStorage.setItem('brewHistoryCount', '0');
+        brewHistoryCountInt = 0;
+      } else {
+        // Increment counter
+        brewHistoryCountInt = parseInt(brewHistoryCount,10);
+        brewHistoryCountInt++;
+        await AsyncStorage.setItem('brewHistoryCount', brewHistoryCountInt.toString());
+      }
+
+      // Store a new brew
+      const newBrewKey = "brewHistory" + brewHistoryCountInt;
+      const newBrewObject = {
+        bean : bean,
+        dose : dose,
+        grind : grind,
+        brewTime : brewTime,
+        brewRatio : brewRatio,
+      };
+      await AsyncStorage.setItem(newBrewKey, JSON.stringify(newBrewObject));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -120,6 +155,7 @@ export default function StartBrewScreen() {
                 '\nBrew Ratio ' +
                 brewRatio,
             );
+            saveData();
           }}
           title={'Save to Brew History'}
         />
