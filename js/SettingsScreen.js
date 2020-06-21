@@ -4,12 +4,27 @@
  */
 
 import * as React from 'react';
-import {Text, View} from 'react-native';
+import {SafeAreaView, Button} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function SettingsScreen() {
+  const clearAsyncStorage = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('Async storage cleared.');
+  };
+
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>SettingsScreen!</Text>
-    </View>
+    <SafeAreaView>
+      <Button
+        title="Clear all brews"
+        onPress={() => {
+          clearAsyncStorage();
+        }}
+      />
+    </SafeAreaView>
   );
 }

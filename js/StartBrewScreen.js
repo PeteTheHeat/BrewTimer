@@ -54,19 +54,22 @@ export default function StartBrewScreen() {
         brewHistoryCountInt = 0;
       } else {
         // Increment counter
-        brewHistoryCountInt = parseInt(brewHistoryCount,10);
+        brewHistoryCountInt = parseInt(brewHistoryCount, 10);
         brewHistoryCountInt++;
-        await AsyncStorage.setItem('brewHistoryCount', brewHistoryCountInt.toString());
+        await AsyncStorage.setItem(
+          'brewHistoryCount',
+          brewHistoryCountInt.toString(),
+        );
       }
 
       // Store a new brew
-      const newBrewKey = "brewHistory" + brewHistoryCountInt;
+      const newBrewKey = 'brewHistory' + brewHistoryCountInt;
       const newBrewObject = {
-        bean : bean,
-        dose : dose,
-        grind : grind,
-        brewTime : brewTime,
-        brewRatio : brewRatio,
+        bean: bean,
+        dose: dose,
+        grind: grind,
+        brewTime: brewTime,
+        brewRatio: brewRatio,
       };
       await AsyncStorage.setItem(newBrewKey, JSON.stringify(newBrewObject));
     } catch (e) {
