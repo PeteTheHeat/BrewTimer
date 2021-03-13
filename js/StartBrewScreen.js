@@ -26,6 +26,7 @@ export default function StartBrewScreen() {
   const [brewTime, setBrewTime] = useState(0);
   const [brewRatio, setBrewRatio] = useState(0);
   const [stopwatchStart, setStopwatchStart] = useState(false);
+  const [stopwatchReset, setStopwatchReset] = useState(false);
 
   const stopwatchOptions = {
     container: {
@@ -75,7 +76,10 @@ export default function StartBrewScreen() {
       await AsyncStorage.setItem(newBrewKey, JSON.stringify(newBrewObject));
     } catch (e) {
       console.log(e);
+      Alert.alert('Save unsuccessful :(');
       return;
+    } finally {
+      setStopwatchReset(true);
     }
 
     //Save success! Show an alert.
@@ -114,13 +118,23 @@ export default function StartBrewScreen() {
           />
         </View>
         <Button
-          onPress={() => setStopwatchStart(!stopwatchStart)}
+          onPress={() => {
+            setStopwatchReset(false);
+            setStopwatchStart(!stopwatchStart);
+          }}
           title={'Start Brew'}
+        />
+        <Button
+          onPress={() => {
+            setStopwatchReset(true);
+          }}
+          title={'Clear Timer'}
         />
         <Stopwatch
           laps
           msecs
           start={stopwatchStart}
+          reset={stopwatchReset}
           options={stopwatchOptions}
           getTime={(time) => {
             setBrewTime(time);
