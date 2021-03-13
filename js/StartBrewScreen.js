@@ -12,6 +12,7 @@ import {
   Text,
   StatusBar,
   Button,
+  Alert,
 } from 'react-native';
 import Counter from 'react-native-counters';
 import {Stopwatch} from 'react-native-stopwatch-timer';
@@ -74,7 +75,11 @@ export default function StartBrewScreen() {
       await AsyncStorage.setItem(newBrewKey, JSON.stringify(newBrewObject));
     } catch (e) {
       console.log(e);
+      return;
     }
+
+    //Save success! Show an alert.
+    Alert.alert('Save successful');
   };
 
   return (
